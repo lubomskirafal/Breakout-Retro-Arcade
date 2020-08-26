@@ -6,104 +6,13 @@
 
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: arial, sans-serif;
-    width: 100%;
-    min-height: 100vh;
-    background-color: #0095dd;
+    width: 100vw;
+    height: 100vh;
+    background-color: $main-bgc;
     overflow: hidden;
-}
-
-h1 {
-    color: #fff;
-    margin: 0 auto 50px;
-}
-
-h2 {
-    margin: 0 auto 30px auto;
-}
-
-p {
-    margin: 10px 0;
 }
 
 canvas {
     display: block;
     background-color: #f0f0f0;
-    border-radius: 5px;
-}
-
-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: transparent;
-    width: 40px;
-    height: 40px;
-    padding: 5px;
-    outline: none;
-    transition: transform .5s ease-in-out;
-    &::before,
-    &::after {
-        content: '';
-        position: absolute;
-        top: 25%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        width: 90%;
-        height: 2px;
-        transition: transform .2s;
-    }
-    &::after {
-        top: 75%;
-    }
-    &:hover {
-        cursor: pointer;
-        span {
-            opacity: 0;
-        }
-        &::before {
-            transform: rotate(45deg) translate(-5px,20px);
-        }
-        &::after {
-            transform: rotate(-45deg) translate(-5px, -20px);
-        }
-    }
-    &:focus {
-        box-shadow:  0 0 5px darken(#0095dd,20%);
-    }
-
-    & span {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        height: 2px;
-        width: 90%;
-        background-color: #fff;
-        transition: opacity .4s;
-    }
-    &.active {
-        transform: translateX(471px);
-    }
-}
-
-.rules {
-    background-color: darken(#0095dd,20%);
-    color: white;
-    padding: 20px;
-    position: absolute;
-    top: 0;
-    left: -460px;
-    bottom: 0;
-    transition: transform .5s ease-in-out;
-    &.active {
-        transform: translateX(460px);
-    }
 }
