@@ -10,6 +10,8 @@
 body {
     position: relative;
     width: 100vw;
+    max-width: 2000px;
+    margin: auto;
     height: 100vh;
     background-color: $main-bgc;
     font-family: 'Orbitron', arial, sans-serif;

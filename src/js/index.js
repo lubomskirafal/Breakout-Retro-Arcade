@@ -10,15 +10,28 @@ const input = document.querySelector('.start-screen__form-input');
 const startScren = document.querySelector('.start-screen');
 const gameOverScreen = document.querySelector('.gameOver');
 const playAgainButton = document.querySelector('.gameOver__button');
-const playersList = document.querySelector('.list ul');
+const playerList = document.querySelector('.list ul');
 
 //game
 const bricks = [];
-const users = [];
-const user = {
+let players = localStorage.getItem('players')!==null?JSON.parse(localStorage.getItem('players')):[];
+
+
+const renderPlayersList = ()=> {
+    const playersList = players.sort((a,b)=>b.score - a.score);
+    playersList.forEach((player, index)=> {
+        const {name, date, score} = player
+        const li = document.createElement('li');
+        const content = `${index+1}. Player: ${name} Score: ${score} Date: ${date}`;
+        li.innerHTML = content;
+        playerList.appendChild(li);
+    })
+};
+
+const player = {
     name:'Johny',
     date : new Date().toLocaleDateString(),
-    score:''
+    score:0
 }
 
 const settings = {
@@ -99,7 +112,7 @@ function drawBall() {
 
 
 const resetBall = ()=> {
-    ball.x =  Math.floor(Math.random()*window.innerWidth-9);
+    ball.x =  getRandomValue(0,window.innerWidth-9);
     ball.y = getRandomValue(window.innerHeight/2,window.innerHeight-28);
     ball.dx = 5;
 };
@@ -221,26 +234,25 @@ const setCanvasSize = ()=>{
 };
 
 const gameOver = ()=> {
-    user.score = settings.score;
+    player.score = settings.score;
     settings.score = 0;
     settings.balls = 3;
     settings.start = false;
     gameOverScreen.classList.add('gameOver--active');
-    resetBricks();
-    console.log(user)
+    players.push(player);
+    localStorage.setItem('players',JSON.stringify(players));
 };
 
 const handleSubmit = (e)=> {
     e.preventDefault();
     startScren.classList.add('start-screen--hidden');
-    user.name = !input.value? 'Johny':input.value.trim();
+    player.name = !input.value? 'Johny':input.value.trim();
     input.value = "";
     setTimeout(()=>{settings.start = true},1000)
 };
 
 const handlePlayAgain = ()=> {
-    gameOverScreen.classList.remove('gameOver--active');
-    startScren.classList.remove('start-screen--hidden');
+    location.reload();
 };
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -248,8 +260,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keyup', handleKeyUp);
     startForm.addEventListener('submit', handleSubmit);
     playAgainButton.addEventListener('click', handlePlayAgain);
+    renderPlayersList();
     initBricks();
-    drawChances();
     setCanvasSize();
     render();
     
