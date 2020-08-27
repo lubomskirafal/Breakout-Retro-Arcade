@@ -11,6 +11,7 @@ const startScren = document.querySelector('.start-screen');
 const gameOverScreen = document.querySelector('.gameOver');
 const playAgainButton = document.querySelector('.gameOver__button');
 const playerList = document.querySelector('.list ul');
+const pauseButton = document.querySelector('.pause-button');
 
 //game
 const bricks = [];
@@ -122,6 +123,8 @@ const updateScore = ()=> {
     if (settings.score % (brickColumn*brickRow)==0) {
         ball.dy = ball.dy -1;
         resetBricks();
+        ball.dx = ball.dx + 1;
+        drawBall();
         settings.balls>2?settings.balls:settings.balls  = settings.balls + 1;
     };
 };
@@ -255,11 +258,16 @@ const handlePlayAgain = ()=> {
     location.reload();
 };
 
+const handlePause = ()=> {
+ settings.start = !settings.start;
+};
+
 document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
     startForm.addEventListener('submit', handleSubmit);
     playAgainButton.addEventListener('click', handlePlayAgain);
+    pauseButton.addEventListener('click', handlePause);
     renderPlayersList();
     initBricks();
     setCanvasSize();
