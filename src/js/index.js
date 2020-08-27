@@ -8,12 +8,15 @@ const ctx = canvas.getContext('2d');
 const startForm = document.querySelector('.start-screen__form');
 const input = document.querySelector('.start-screen__form-input');
 const startScren = document.querySelector('.start-screen');
+const gameOverScreen = document.querySelector('.gameOver');
+const playAgainButton = document.querySelector('.gameOver__button');
+const playersList = document.querySelector('.list ul');
 
 //game
 const bricks = [];
 const users = [];
 const user = {
-    name:'user',
+    name:'Johny',
     date : new Date().toLocaleDateString(),
     score:''
 }
@@ -127,7 +130,7 @@ const moveBall = ()=> {
     //paddle colision detection
     if(
         ball.x + ball.size > paddle.x - paddle.width/2&&
-        ball.x + ball.size < paddle.x + paddle.width &&
+        ball.x + ball.size < paddle.x + paddle.width/2+10 &&
         ball.y + ball.size > paddle.y -20
     ) {
         ball.dy = -ball.dy;
@@ -218,22 +221,33 @@ const setCanvasSize = ()=>{
 };
 
 const gameOver = ()=> {
+    user.score = settings.score;
     settings.score = 0;
+    settings.balls = 3;
+    settings.start = false;
+    gameOverScreen.classList.add('gameOver--active');
     resetBricks();
+    console.log(user)
 };
 
 const handleSubmit = (e)=> {
     e.preventDefault();
     startScren.classList.add('start-screen--hidden');
-    user.name = input.value.trim();
+    user.name = !input.value? 'Johny':input.value.trim();
+    input.value = "";
     setTimeout(()=>{settings.start = true},1000)
-    console.log(user)
+};
+
+const handlePlayAgain = ()=> {
+    gameOverScreen.classList.remove('gameOver--active');
+    startScren.classList.remove('start-screen--hidden');
 };
 
 document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
     startForm.addEventListener('submit', handleSubmit);
+    playAgainButton.addEventListener('click', handlePlayAgain);
     initBricks();
     drawChances();
     setCanvasSize();
