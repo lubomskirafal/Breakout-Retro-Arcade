@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=false;">
     <meta http-equiv="X-UA-Compatibile" content="IE=edge">
-    <title>Breakout</title>
-    <meta name="description" content="Breakout game">
+    <title>Breakout Retro Arcade</title>
+    <meta name="description" content="Breakout Retro Arcade">
     <meta name="keywords" content="brakeout, game, old, school, arcade, retro">
     <meta name="robots" content="follow, index">
     <meta name="author" content="Rafal Lubomski">
@@ -18,12 +18,24 @@
     <meta property="og:title" content="Brakeout">
     <meta property="media-image" content="#">
     <meta property="ogimage:width" content="200px">
-    <meta property="og:description" content="Brakeout game">
+    <meta property="og:description" content="Brakeout Retro Arcade">
     <meta property="og:type" content="webpage">
   </head>
 
   <body>
-    <canvas id="canvas" width="800" height="600"></canvas>
+    <canvas id="canvas"></canvas>
+    <div class="start-screen">
+      <h2 class="start-screen__title">Breakout Retro Arcade</h2>
+      <form class="start-screen__form">
+        <div class="start-screen__form-wrapper">
+          <input class="start-screen__form-input" type="text" placeholder="Name">
+          <button class="start-screen__form-button">start</button>
+        </div>
+      </form>
+      <div class="list">
+        <ul></ul>
+      </div>
+    </div>
   </body>
 
 </html>

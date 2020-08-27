@@ -1,11 +1,29 @@
 import '.././sass/index.scss';
+import getRandomValue from './components/getRandomValue';
 
 const brickColumn = 8;
 const brickRow = 8;
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const startForm = document.querySelector('.start-screen__form');
+const input = document.querySelector('.start-screen__form-input');
+const startScren = document.querySelector('.start-screen');
+
+//game
 const bricks = [];
-let score = 0, start = false;
+const users = [];
+const user = {
+    name:'user',
+    date : new Date().toLocaleDateString(),
+    score:''
+}
+
+const settings = {
+    score:0,
+    start: false,
+    balls: 3
+};
+
 
 const brick = {
     padding: 5,
@@ -44,7 +62,7 @@ const drawBricks = ()=> {
             const {x,y, width, height, padding, offsetX, offsetY, vissible} = brick;
             ctx.beginPath();
             ctx.rect(x,y, width, height)
-            ctx.fillStyle = vissible? '#0095dd':'transparent';
+            ctx.fillStyle = vissible? '#fff':'transparent';
             ctx.fill();
             ctx.closePath();
         })
@@ -52,24 +70,18 @@ const drawBricks = ()=> {
 };
 
 
-function resetBricks() {
+const resetBricks = ()=> {
     bricks.forEach(column=>column.forEach(brick=> brick.vissible = true))
 };
 
 // //...ball...
 
-const getRandomValue = (min,max)=> {
-    let value  = Math.floor(Math.random()*(min - max)+max);
-    if (value===0) return value+1;
-
-    return value;
-};
 
 const ball = {
     x: Math.floor(Math.random()*window.innerWidth-9),
-    y: Math.floor(Math.random()*((window.innerHeight/2)-(window.innerHeight-28))+(window.innerHeight-28)),
+    y: getRandomValue(window.innerHeight/2,window.innerHeight-28),
     size: 9,
-    dx: getRandomValue(-10,10),
+    dx: 5,
     dy: -8,
 }
 
@@ -77,7 +89,7 @@ function drawBall() {
     const {x,y,size} = ball;
     ctx.beginPath();
     ctx.arc(x,y, size, 0, Math.PI*2);
-    ctx.fillStyle = '#0095dd';
+    ctx.fillStyle = '#fff';
     ctx.fill();
     ctx.closePath();
 };
@@ -85,16 +97,24 @@ function drawBall() {
 
 const resetBall = ()=> {
     ball.x =  Math.floor(Math.random()*window.innerWidth-9);
-    ball.y = Math.floor(Math.random()*((window.innerHeight/2)-(window.innerHeight-28))+(window.innerHeight-28));
-    ball.dx = getRandomValue(-4,4);
+    ball.y = getRandomValue(window.innerHeight/2,window.innerHeight-28);
+    ball.dx = 5;
 };
 
-function updateScore() {
-    score ++;
-    let speed = ball.dy;
-    if (score % (brickColumn*brickRow)==0) {
-        ball.dy = speed + 5;
+const updateScore = ()=> {
+    settings.score =  settings.score + 1;
+    if (settings.score % (brickColumn*brickRow)==0) {
+        ball.dy = ball.dy -1;
         resetBricks();
+        settings.balls>2?settings.balls:settings.balls  = settings.balls + 1;
+    };
+};
+
+const updateChances = ()=> {
+    settings.balls = settings.balls -1;
+    if(settings.balls < 1) {
+        settings.balls = 3;
+        gameOver();
     };
 };
 
@@ -111,7 +131,7 @@ const moveBall = ()=> {
         ball.y + ball.size > paddle.y -20
     ) {
         ball.dy = -ball.dy;
-        ball.dx = ball.dx * getRandomValue(-1,1);
+        ball.dx = ball.dx;
     };
     // bricks colision detection
 
@@ -131,21 +151,18 @@ const moveBall = ()=> {
     }));
 
     if (ball.y + ball.size > window.innerHeight) {
-        score = 0;
-        resetBricks();
+        updateChances();
         resetBall();
     }
 };
 
 // //...paddle...
 
-
-
 const drawPaddle = ()=> {
-    const {x, y, width, height} = paddle;
+    const {x, width, height} = paddle;
     ctx.beginPath();
     ctx.rect((x-(width/2)), window.innerHeight - 20, width, height)
-    ctx.fillStyle = '#0095dd';
+    ctx.fillStyle = '#fff';
     ctx.fill();
     ctx.closePath();
 };
@@ -163,19 +180,25 @@ const movePaddle = ()=> {
 
 const drawScore = ()=> {
     ctx.font = '20px Arial';
-    ctx.fillText(`Score: ${score}`, canvas.width/2-30, 25);
+    ctx.fillText(`Score: ${settings.score}`,( canvas.width-canvas.width)+20, 25);
 };
 
+const drawChances = ()=> {
+    ctx.font = '20px Arial';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(`Balls: ${settings.balls}`, canvas.width - 85, 25);
+};
 // //main
 
 const render = ()=> {
     ctx.clearRect(0,0, canvas.width, canvas.height);
+    drawChances();
     drawPaddle();
     movePaddle();
     drawBall();
-    moveBall();
     drawScore();
     drawBricks();
+    settings.start?moveBall(): false;
     requestAnimationFrame(render);
 };
 
@@ -194,28 +217,40 @@ const setCanvasSize = ()=>{
     canvas.height = window.innerHeight;
 };
 
+const gameOver = ()=> {
+    settings.score = 0;
+    resetBricks();
+};
 
+const handleSubmit = (e)=> {
+    e.preventDefault();
+    startScren.classList.add('start-screen--hidden');
+    user.name = input.value.trim();
+    setTimeout(()=>{settings.start = true},1000)
+    console.log(user)
+};
 
 document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
+    startForm.addEventListener('submit', handleSubmit);
     initBricks();
+    drawChances();
     setCanvasSize();
     render();
-    
-    // setTimeout(()=>start = true,5000);
-    
     
     window.addEventListener('resize', ()=>{
         initBricks();
         setCanvasSize();
         drawPaddle();
         drawBricks();
+        drawBall();
     });
     window.addEventListener('orientationchange', ()=> {
         initBricks();
         setCanvasSize();
         drawPaddle();
         drawBricks();
+        drawBall();
     });
 })
