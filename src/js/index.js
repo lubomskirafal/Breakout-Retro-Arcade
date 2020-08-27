@@ -23,7 +23,7 @@ const renderPlayersList = ()=> {
     playersList.forEach((player, index)=> {
         const {name, date, score} = player
         const li = document.createElement('li');
-        const content = `${index+1}. Player: ${name} Score: ${score} Date: ${date}`;
+        const content = `${index<9?"0"+(index+1):index+1}. Player: ${name} Score: ${score} Date: ${date}`;
         li.innerHTML = content;
         playerList.appendChild(li);
     })
@@ -262,12 +262,25 @@ const handlePause = ()=> {
  settings.start = !settings.start;
 };
 
+const handleMove = (e)=> {
+    let currentTouch = e.touches[0].clientX;
+    if(currentTouch<38) return currentTouch = 0;
+    if(currentTouch>window.innerWidth-40) return currentTouch = window.innerWidth - 38;
+    paddle.x = currentTouch;
+};
+
 document.addEventListener('DOMContentLoaded',()=>{
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
     startForm.addEventListener('submit', handleSubmit);
     playAgainButton.addEventListener('click', handlePlayAgain);
     pauseButton.addEventListener('click', handlePause);
+    window.addEventListener('touchstart', ()=>{
+        window.addEventListener('touchmove', handleMove);
+    });
+    window.addEventListener('touchend',()=>{
+        window.removeEventListener('touchmove', handleMove);
+    });
     renderPlayersList();
     initBricks();
     setCanvasSize();
