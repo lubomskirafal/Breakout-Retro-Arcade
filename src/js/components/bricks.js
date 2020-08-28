@@ -30,7 +30,7 @@ const drawBricks = (bricks, ctx)=> {
 };
 
 
-const resetBricks = ()=> {
+const resetBricks = (bricks)=> {
     bricks.forEach(column=>column.forEach(brick=> brick.vissible = true))
 };
 

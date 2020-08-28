@@ -3,9 +3,9 @@ import {resetBricks} from './bricks';
 const updateScore = (settings, brickColumn, brickRow, ball, ctx, bricks)=> {
     settings.score =  settings.score + 1;
     if (settings.score % (brickColumn*brickRow)==0) {
-        ball.dy = ball.dy -1;
+        ball.dy = ball.dy - 2;
         resetBricks(bricks);
-        ball.dx = ball.dx + 1;
+        ball.dx = ball.dx + 3;
         drawBall(ctx, ball);
         settings.balls>2?settings.balls:settings.balls  = settings.balls + 1;
     };
