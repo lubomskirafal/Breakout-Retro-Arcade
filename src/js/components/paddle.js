@@ -1,13 +1,13 @@
-const drawPaddle = (paddle, ctx)=> {
-    const {x, width, height} = paddle;
+async function drawPaddle (paddle, ctx){
+    const {x, y, width, height} = paddle;
     ctx.beginPath();
-    ctx.rect((x-(width/2)), window.innerHeight - 20, width, height)
+    ctx.rect((x-(width/2)), y, width, height)
     ctx.fillStyle = '#fff';
     ctx.fill();
     ctx.closePath();
 };
 
-const movePaddle = (paddle, canvas)=> {
+async function movePaddle (paddle, canvas){
     
     paddle.x += paddle.dx;
     

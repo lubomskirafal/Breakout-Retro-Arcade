@@ -103,14 +103,6 @@ module.exports = {
           to: 'images'
         }
       ]
-    ),
-    new CopyPlugin(
-      [
-        {
-          from: 'public/data',
-          to: 'data'
-        }
-      ]
-    ),
+    )
   ]
 }

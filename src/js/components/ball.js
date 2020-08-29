@@ -11,23 +11,23 @@ const drawBall = (ctx, ball)=> {
     ctx.closePath();
 };
 
-const resetBall = (ball)=> {
-    ball.x =  getRandomValue(0,window.innerWidth-9);
-    ball.y = getRandomValue(window.innerHeight/2,window.innerHeight-28);
+const resetBall = (ball, canvas)=> {
+    ball.x =  getRandomValue(0,canvas.width-9);
+    ball.y = getRandomValue(canvas.height/2,canvas.height-28);
     ball.dx = 5;
 };
 
-const moveBall = (ball, paddle, bricks, settings, player, players, brickColumn, brickRow, ctx)=> {
+const moveBall = (ball, paddle, bricks, settings, player, players, brickColumn, brickRow, ctx, canvas)=> {
     ball.x += ball.dx;
     ball.y += ball.dy;
     //top/bottom/left/right colision detection
-    if(ball.x + ball.size > window.innerWidth || ball.x - ball.size <0) ball.dx *= -1;
-    if(ball.y + ball.size > window.innerHeight || ball.y - ball.size <0 ) ball.dy *= -1;
+    if(ball.x + ball.size > canvas.width || ball.x - ball.size <0) ball.dx *= -1;
+    if(ball.y + ball.size > canvas.height || ball.y - ball.size <0 ) ball.dy *= -1;
     //paddle colision detection
     if(
         ball.x + ball.size > paddle.x - paddle.width/2&&
         ball.x + ball.size < paddle.x + paddle.width/2+10 &&
-        ball.y + ball.size > paddle.y -20
+        ball.y + ball.size > paddle.y 
     ) {
         ball.dy = -ball.dy;
         ball.dx = ball.dx;
@@ -44,14 +44,20 @@ const moveBall = (ball, paddle, bricks, settings, player, players, brickColumn, 
             ) {
                 ball.dy *= -1;
                 brick.vissible = false;
-                updateScore(settings, brickColumn, brickRow, ball, ctx, bricks);
+                updateScore(
+                    settings, 
+                    brickColumn, 
+                    brickRow, 
+                    ball, 
+                    ctx, 
+                    bricks);
             };
         }
     }));
 
-    if (ball.y + ball.size > window.innerHeight) {
+    if (ball.y + ball.size > canvas.height) {
         updateChances(settings, player, players);
-        resetBall(ball);
+        resetBall(ball, canvas);
     }
 };
 

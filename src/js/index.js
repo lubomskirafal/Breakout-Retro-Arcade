@@ -18,7 +18,6 @@ const input = document.querySelector('.start-screen__form-input');
 const startScreen = document.querySelector('.start-screen');
 const playAgainButton = document.querySelector('.gameOver__button');
 const playersList = document.querySelector('.list ul');
-const pauseButton = document.querySelector('.pause-button');
 const bricks = [];
 let players = localStorage.getItem('players')!==null?JSON.parse(localStorage.getItem('players')):[];
 
@@ -35,6 +34,8 @@ const settings = {
 };
 
 const brick = {
+    width: 30,
+    height: 8,
     padding: 5,
     offsetY:40,
     vissible: true,
@@ -42,7 +43,7 @@ const brick = {
 
 const paddle = {
     x: canvas.width/2,
-    y: window.innerHeight,
+    y: canvas.height - 20,
     width: 80,
     height: 8,
     speed: 8,
@@ -50,22 +51,17 @@ const paddle = {
 };
 
 const ball = {
-    x: Math.floor(Math.random()*window.innerWidth-9),
-    y: getRandomValue(window.innerHeight/2,window.innerHeight-28),
+    x: Math.floor(Math.random()*canvas.width-9),
+    y: getRandomValue(canvas.height/2, canvas.height-28),
     size: 9,
     dx: 5,
     dy: -8,
 };
 
-const setCanvasSize = ()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-};
-
-const render = ()=> {
+async function render(){
     ctx.clearRect(0,0, canvas.width, canvas.height);
     drawChances(ctx, settings, canvas);
-    drawPaddle(paddle, ctx);
+    drawPaddle(paddle, ctx, canvas);
     movePaddle(paddle, canvas);
     drawBall(ctx, ball);
     drawScore(ctx, settings, canvas);
@@ -80,7 +76,8 @@ const render = ()=> {
         players, 
         brickColumn, 
         brickRow, 
-        ctx
+        ctx,
+        canvas
         ): false;
 
     requestAnimationFrame(render);
@@ -99,33 +96,17 @@ document.addEventListener('DOMContentLoaded',()=>{
         handleKeyDown(e,paddle);
         if(e.key === 'Pause') handlePause(settings);
     });
+    document.addEventListener('touchstart', async function(){
+        document.addEventListener('touchmove', (e)=> handleMove(e, paddle, canvas));
+    });
+    document.addEventListener('touchend',()=>{
+        document.removeEventListener('touchmove', handleMove);
+    });
     document.addEventListener('keyup', (e)=> handleKeyUp(e, paddle));
     startForm.addEventListener('submit', handleSubmit);
     playAgainButton.addEventListener('click', handlePlayAgain);
     canvas.addEventListener('click', ()=> handlePause(settings));
-    window.addEventListener('touchstart', ()=>{
-        window.addEventListener('touchmove', (e)=> handleMove(e, paddle));
-    });
-    window.addEventListener('touchend',()=>{
-        window.removeEventListener('touchmove', handleMove);
-    });
     renderPlayersList(players, playersList);
     initBricks(brick, bricks, brickColumn, brickRow);
-    setCanvasSize();
     render();
-    
-    window.addEventListener('resize', ()=>{
-        initBricks(brick, bricks);
-        setCanvasSize();
-        drawPaddle(paddle, ctx);
-        drawBricks(bricks, ctx);
-        drawBall(ctx.ball);
-    });
-    window.addEventListener('orientationchange', ()=> {
-        initBricks(brick, bricks, brickColumn, brickRow);
-        setCanvasSize();
-        drawPaddle(paddle, ctx);
-        drawBricks(bricks, ctx);
-        drawBall(ctx, ball);
-    });
-})
+});
