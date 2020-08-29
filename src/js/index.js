@@ -94,14 +94,15 @@ const handleSubmit = (e)=> {
     setTimeout(()=>{settings.start = true},1000)
 };
 
-
-
 document.addEventListener('DOMContentLoaded',()=>{
-    document.addEventListener('keydown', (e)=> handleKeyDown(e,paddle));
+    document.addEventListener('keydown', (e)=> {
+        handleKeyDown(e,paddle);
+        if(e.key === 'Pause') handlePause(settings);
+    });
     document.addEventListener('keyup', (e)=> handleKeyUp(e, paddle));
     startForm.addEventListener('submit', handleSubmit);
     playAgainButton.addEventListener('click', handlePlayAgain);
-    pauseButton.addEventListener('click', ()=> handlePause(settings));
+    canvas.addEventListener('click', ()=> handlePause(settings));
     window.addEventListener('touchstart', ()=>{
         window.addEventListener('touchmove', (e)=> handleMove(e, paddle));
     });
