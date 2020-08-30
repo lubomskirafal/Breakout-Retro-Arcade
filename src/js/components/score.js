@@ -12,7 +12,6 @@ const updateScore = (settings, brickColumn, brickRow, ball, ctx, bricks)=> {
         resetBricks(bricks);
         drawBall(ctx, ball);
         settings.balls>2?settings.balls:settings.balls  = settings.balls + 1;
-        console.log(`y=${ball.dy}, x=${ball.dx}`)
     };
 };
 

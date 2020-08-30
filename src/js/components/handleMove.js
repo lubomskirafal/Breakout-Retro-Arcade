@@ -7,7 +7,7 @@ const handleKeyUp= (e, paddle)=> {
     if(e.key === 'ArrowLeft'||e.key === 'ArrowRight') return paddle.dx = 0;
 };
 
-async function handleMove (e, paddle, canvas) {
+const handleMove = (e, paddle, canvas)=> {
     
     let currentTouch = e.touches[0].clientX;
     if(currentTouch<38) return currentTouch = 0;

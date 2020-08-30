@@ -96,9 +96,13 @@ document.addEventListener('DOMContentLoaded',()=>{
         handleKeyDown(e,paddle);
         if(e.key === 'Pause') handlePause(settings);
     });
-    document.addEventListener('touchstart', async function(){
-        document.addEventListener('touchmove', (e)=> {handleMove(e, paddle, canvas),{passive:true}});
-    }, {passive:true});
+    document.addEventListener('touchstart', (e)=>{
+        e.preventDefault();
+        document.addEventListener('touchmove', (e)=> {
+            e.preventDefault();
+            handleMove(e, paddle, canvas);
+        },{passive:false});
+    }, {passive:false});
     document.addEventListener('touchend',()=>{
         document.removeEventListener('touchmove', handleMove);
     });
