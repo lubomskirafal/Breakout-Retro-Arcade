@@ -54,11 +54,11 @@ const ball = {
     x: Math.floor(Math.random()*canvas.width-9),
     y: getRandomValue(canvas.height/2, canvas.height-28),
     size: 9,
-    dx: 5,
-    dy: -8,
+    dx: 1,
+    dy: -5,
 };
 
-async function render(){
+const render = ()=>{
     ctx.clearRect(0,0, canvas.width, canvas.height);
     drawChances(ctx, settings, canvas);
     drawPaddle(paddle, ctx, canvas);
@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(e.key === 'Pause') handlePause(settings);
     });
     document.addEventListener('touchstart', async function(){
-        document.addEventListener('touchmove', (e)=> handleMove(e, paddle, canvas));
-    });
+        document.addEventListener('touchmove', (e)=> {handleMove(e, paddle, canvas),{passive:true}});
+    }, {passive:true});
     document.addEventListener('touchend',()=>{
         document.removeEventListener('touchmove', handleMove);
     });

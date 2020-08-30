@@ -1,4 +1,4 @@
-async function drawPaddle (paddle, ctx){
+const drawPaddle = (paddle, ctx)=>{
     const {x, y, width, height} = paddle;
     ctx.beginPath();
     ctx.rect((x-(width/2)), y, width, height)
@@ -7,7 +7,7 @@ async function drawPaddle (paddle, ctx){
     ctx.closePath();
 };
 
-async function movePaddle (paddle, canvas){
+const movePaddle =  (paddle, canvas)=>{
     
     paddle.x += paddle.dx;
     

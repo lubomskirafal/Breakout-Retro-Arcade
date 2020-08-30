@@ -14,7 +14,6 @@ const drawBall = (ctx, ball)=> {
 const resetBall = (ball, canvas)=> {
     ball.x =  getRandomValue(0,canvas.width-9);
     ball.y = getRandomValue(canvas.height/2,canvas.height-28);
-    ball.dx = 5;
 };
 
 const moveBall = (ball, paddle, bricks, settings, player, players, brickColumn, brickRow, ctx, canvas)=> {
